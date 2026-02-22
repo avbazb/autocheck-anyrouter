@@ -9,7 +9,6 @@ class PrivacyHandler:
 	# 环境变量名
 	ENV_SHOW_SENSITIVE_INFO = 'SHOW_SENSITIVE_INFO'
 	ENV_ACTIONS_RUNNER_DEBUG = 'ACTIONS_RUNNER_DEBUG'
-	ENV_REPO_VISIBILITY = 'REPO_VISIBILITY'
 
 	def __init__(self, show_sensitive_info: bool):
 		"""
@@ -28,8 +27,7 @@ class PrivacyHandler:
 		优先级：
 		1. SHOW_SENSITIVE_INFO（手动控制，最高优先级）
 		2. ACTIONS_RUNNER_DEBUG（调试模式）
-		3. REPO_VISIBILITY（仓库可见性，私有仓库显示，公开仓库脱敏）
-		4. 本地运行（默认显示）
+		3. 默认显示（仓库视为私有）
 
 		Returns:
 			是否应该显示敏感信息
@@ -44,13 +42,7 @@ class PrivacyHandler:
 		if debug_mode:
 			return True
 
-		# 3. 检查仓库可见性
-		repo_visibility = os.getenv(PrivacyHandler.ENV_REPO_VISIBILITY, '').lower()
-		if repo_visibility:
-			# 私有仓库显示，公开仓库脱敏
-			return repo_visibility != 'public'
-
-		# 4. 本地运行（无 REPO_VISIBILITY）默认显示
+		# 3. 默认显示（仓库视为私有）
 		return True
 
 	def get_full_account_name(self, account_info: dict[str, Any], account_index: int) -> str:

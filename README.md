@@ -24,9 +24,11 @@
 
 > 隐私保护不影响通知内容，仅作用于 GitHub Actions Step Summary 以及 GitHub Action 的日志。
 
-- **公开仓库**：自动脱敏账号名称和余额信息
-- **私有仓库**：显示完整信息
-- **手动控制**：通过 `ACTIONS_RUNNER_DEBUG` 或 `SHOW_SENSITIVE_INFO` 环境变量控制强制展示
+- **默认行为**：仓库视为私有，显示完整信息
+- **手动控制**：通过 `SHOW_SENSITIVE_INFO` 环境变量控制
+  - 设置为 `true`：显示完整信息
+  - 设置为 `false`：脱敏账号名称和余额信息
+- **调试模式**：通过 `ACTIONS_RUNNER_DEBUG=true` 强制展示完整信息
 
 ## 使用方式
 
@@ -56,16 +58,16 @@
 签到成功后将在 Summary 面板展示签到结果：
 
 <details>
-<summary>脱敏示例（公开仓库默认展示）</summary>
+<summary>完整信息示例（默认行为）</summary>
 
-![签到成功脱敏示例](/assets/check-in-success-desensitization.png)
+![签到成功示例](/assets/check-in-success.png)
 
 </details>
 
 <details>
-<summary>非脱敏示例（私有仓库或开启调试模式）</summary>
+<summary>脱敏示例（设置 SHOW_SENSITIVE_INFO=false）</summary>
 
-![签到成功示例](/assets/check-in-success.png)
+![签到成功脱敏示例](/assets/check-in-success-desensitization.png)
 
 </details>
 

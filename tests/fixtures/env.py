@@ -75,16 +75,6 @@ class EnvManager:
 		os.environ['NOTIFY_TRIGGERS'] = triggers
 
 	@staticmethod
-	def set_repo_visibility(visibility: str):
-		"""
-		设置仓库可见性
-
-		Args:
-			visibility: 可见性（public/private）
-		"""
-		os.environ['REPO_VISIBILITY'] = visibility
-
-	@staticmethod
 	def clear_all_notifications():
 		"""清除所有通知平台配置"""
 		notification_keys = [
