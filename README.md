@@ -58,7 +58,7 @@
 签到成功后将在 Summary 面板展示签到结果：
 
 <details>
-<summary>默认示例（显示完整信息）</summary>
+<summary>完整信息示例（默认行为）</summary>
 
 ![签到成功示例](/assets/check-in-success.png)
 
