@@ -16,27 +16,26 @@ class TestFeatures:
 
 	@pytest.mark.asyncio
 	@pytest.mark.parametrize(
-		'repo_visibility,expected_in_content',
+		'show_sensitive,expected_in_content',
 		[
-			('public', '账号 2'),  # 公开仓库：默认账号编号
-			('private', '自定义名称'),  # 私有仓库：显示完整名称
+			(None, '自定义名称'),  # 默认：仓库视为私有，显示完整名称
+			('true', '自定义名称'),  # 显式启用：显示完整名称
+			('false', '账号 2'),  # 显式禁用：默认账号编号
 		],
 	)
-	async def test_privacy_modes(self, accounts_env, tmp_path, repo_visibility: str, expected_in_content: str):
-		"""测试隐私模式（公开/私有仓库）"""
+	async def test_privacy_modes(self, accounts_env, tmp_path, show_sensitive: str | None, expected_in_content: str):
+		"""测试隐私模式（默认私有/显式控制）"""
 		accounts_env(MIXED_ACCOUNTS)
 
 		app = Application()
-		app.balance_manager.balance_hash_file = tmp_path / f'hash_{repo_visibility}.txt'
-		summary_file = tmp_path / f'summary_{repo_visibility}.md'
+		app.balance_manager.balance_hash_file = tmp_path / f'hash_{show_sensitive}.txt'
+		summary_file = tmp_path / f'summary_{show_sensitive}.md'
 
-		with patch.dict(
-			os.environ,
-			{
-				'REPO_VISIBILITY': repo_visibility,
-				'GITHUB_STEP_SUMMARY': str(summary_file),
-			},
-		):
+		env_patch = {'GITHUB_STEP_SUMMARY': str(summary_file)}
+		if show_sensitive is not None:
+			env_patch['SHOW_SENSITIVE_INFO'] = show_sensitive
+
+		with patch.dict(os.environ, env_patch):
 			with ExitStack() as stack:
 				MockPlaywright.setup_success(stack)
 				MockHttpClient.setup(stack, MockHttpClient.get_success_handler, MockHttpClient.post_success_handler)
